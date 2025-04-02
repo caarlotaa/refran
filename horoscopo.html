@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horóscopo Semanal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&family=Cinzel:wght@400;500&family=Comfortaa:wght@500&display=swap');
+        
+        :root {
+            --primary-color: #D4AF37;
+            --secondary-color: #4A2545;
+            --dark-bg: #0F0A1E;
+            --text-color: #F5F0E6;
+            --light-accent: #F5D073;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--dark-bg) 100%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(15, 10, 30, 0.85);
+            border-radius: 15px;
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #E2D7D0;
+        }
+        
+        .astral-info {
+            background: rgba(74, 37, 69, 0.5);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .astral-info h2 {
+            font-family: 'Comfortaa', cursive;
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        
+        .current-status {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .current-status {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .status-card {
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        
+        .status-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sign-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .sign-card {
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .sign-card:hover {
+            transform: translateY(-5px);
+            background: rgba(212, 175, 55, 0.2);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .sign-card h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .sign-card p {
+            margin: 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .sign-card .emoji {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .reveal-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(to right, var(--primary-color), var(--light-accent));
+            color: var(--dark-bg);
+            border: none;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: all 0.3s;
+            font-family: 'Comfortaa', cursive;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+            text-align: center;
+        }
+        
+        .reveal-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(212, 175, 55, 0.6);
+        }
+        
+        .instagram-embed {
+            min-height: 600px;
+            background: rgba(74, 37, 69, 0.3);
+            border-radius: 10px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 30px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        
+        .back-link:hover {
+            background: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+        }
+        
+        .back-link::before {
+            content: "←";
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .moon-icon {
+            font-size: 1.3rem;
+            margin-right: 5px;
+        }
+        
+        .full-moon-countdown {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .astral-event {
+            background: rgba(74, 37, 69, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-top: 3px solid var(--primary-color);
+        }
+        
+        .astral-event h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-family: 'Comfortaa', cursive;
+        }
+        
+        .event-date {
+            color: var(--light-accent);
+            font-weight: 600;
+            margin: 5px 0 10px;
+            display: block;
+        }
+        
+        .astral-event p {
+            margin-bottom: 0;
+        }
+        
+        .loading-spinner {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* ===== MEJORAS PARA MÓVILES ===== */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+
+            .astral-info, .astral-event {
+                padding: 15px;
+            }
+
+            .sign-info {
+                grid-template-columns: 1fr; /* 1 columna en móviles */
+                gap: 10px;
+            }
+
+            .instagram-embed {
+                min-height: 300px;
+            }
+
+            .reveal-button {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .back-link {
+                padding: 10px 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Horóscopo Semanal</h1>
+        <p class="subtitle">Predicciones astrales de <strong>@fersita.fresita._</strong></p>
+        
+        <div class="astral-info">
+            <h2>Época Astral Actual</h2>
+            
+            <div class="current-status">
+                <div class="status-card">
+                    <h3><span class="moon-icon">🌙</span> Fase lunar</h3>
+                    <p id="moon-phase">Calculando fase lunar...</p>
+                    <p id="full-moon-countdown" class="full-moon-countdown"></p>
+                </div>
+                <div class="status-card">
+                    <h3>☿ Mercurio</h3>
+                    <p id="mercurio-info">Calculando estado...</p>
+                </div>
+            </div>
+            
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Signos del Mes</h3>
+            <div class="sign-info" id="current-signs">
+                <!-- Los signos se insertarán dinámicamente aquí -->
+            </div>
+        </div>
+        
+        <div class="astral-event">
+            <h3>Evento astronómico importante</h3>
+            <div id="astral-event-content">
+                <span id="event-date" class="event-date"></span>
+                <p id="event-description"></p>
+                <p id="event-visibility" class="astral-event p"></p>
+            </div>
+        </div>
+        
+        <button id="revealBtn" class="reveal-button">
+            <!-- El texto se actualizará dinámicamente -->
+        </button>
+        
+        <div id="loadingSpinner" class="loading-spinner"></div>
+        
+        <div id="instagramEmbed" class="instagram-embed">
+            <!-- Reemplaza este enlace con tu publicación real de Instagram -->
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DH3Uh8UxP5H/?igsh=MXVzYmYyYzUxb2ppZw%3D%3D" data-instgrm-version="14" style="width: 100%;"></blockquote>
+        </div>
+
+        <a href="index.html" class="back-link">Volver al Refrán</a>
+    </div>
+
+    <script>
+        // Variables CSS personalizadas
+        const root = document.documentElement;
+        
+        // Datos completos de los signos zodiacales
+        const zodiacSigns = [
+            { 
+                name: "Aries", 
+                date: "21 Mar - 19 Abr", 
+                element: "Fuego", 
+                planet: "Marte", 
+                stone: "Amatista",
+                emoji: "♈",
+                monthStart: 2, // Marzo (0-indexado)
+                dayStart: 21,
+                monthEnd: 3, // Abril
+                dayEnd: 19
+            },
+            { 
+                name: "Tauro", 
+                date: "20 Abr - 20 May", 
+                element: "Tierra", 
+                planet: "Venus", 
+                stone: "Cuarzo rosa",
+                emoji: "♉",
+                monthStart: 3,
+                dayStart: 20,
+                monthEnd: 4,
+                dayEnd: 20
+            },
+            { 
+                name: "Géminis", 
+                date: "21 May - 20 Jun", 
+                element: "Aire", 
+                planet: "Mercurio", 
+                stone: "Ágata",
+                emoji: "♊",
+                monthStart: 4,
+                dayStart: 21,
+                monthEnd: 5,
+                dayEnd: 20
+            },
+            { 
+                name: "Cáncer", 
+                date: "21 Jun - 22 Jul", 
+                element: "Agua", 
+                planet: "Luna", 
+                stone: "Esmeralda",
+                emoji: "♋",
+                monthStart: 5,
+                dayStart: 21,
+                monthEnd: 6,
+                dayEnd: 22
+            },
+            { 
+                name: "Leo", 
+                date: "23 Jul - 22 Ago", 
+                element: "Fuego", 
+                planet: "Sol", 
+                stone: "Ojo de tigre",
+                emoji: "♌",
+                monthStart: 6,
+                dayStart: 23,
+                monthEnd: 7,
+                dayEnd: 22
+            },
+            { 
+                name: "Virgo", 
+                date: "23 Ago - 22 Sep", 
+                element: "Tierra", 
+                planet: "Mercurio", 
+                stone: "Jaspe",
+                emoji: "♍",
+                monthStart: 7,
+                dayStart: 23,
+                monthEnd: 8,
+                dayEnd: 22
+            },
+            { 
+                name: "Libra", 
+                date: "23 Sep - 22 Oct", 
+                element: "Aire", 
+                planet: "Venus", 
+                stone: "Zafiro",
+                emoji: "♎",
+                monthStart: 8,
+                dayStart: 23,
+                monthEnd: 9,
+                dayEnd: 22
+            },
+            { 
+                name: "Escorpio", 
+                date: "23 Oct - 21 Nov", 
+                element: "Agua", 
+                planet: "Plutón", 
+                stone: "Topacio",
+                emoji: "♏",
+                monthStart: 9,
+                dayStart: 23,
+                monthEnd: 10,
+                dayEnd: 21
+            },
+            { 
+                name: "Sagitario", 
+                date: "22 Nov - 21 Dic", 
+                element: "Fuego", 
+                planet: "Júpiter", 
+                stone: "Turquesa",
+                emoji: "♐",
+                monthStart: 10,
+                dayStart: 22,
+                monthEnd: 11,
+                dayEnd: 21
+            },
+            { 
+                name: "Capricornio", 
+                date: "22 Dic - 19 Ene", 
+                element: "Tierra", 
+                planet: "Saturno", 
+                stone: "Granate",
+                emoji: "♑",
+                monthStart: 11,
+                dayStart: 22,
+                monthEnd: 0,
+                dayEnd: 19
+            },
+            { 
+                name: "Acuario", 
+                date: "20 Ene - 18 Feb", 
+                element: "Aire", 
+                planet: "Urano", 
+                stone: "Aguamarina",
+                emoji: "♒",
+                monthStart: 0,
+                dayStart: 20,
+                monthEnd: 1,
+                dayEnd: 18
+            },
+            { 
+                name: "Piscis", 
+                date: "19 Feb - 20 Mar", 
+                element: "Agua", 
+                planet: "Neptuno", 
+                stone: "Amatista",
+                emoji: "♓",
+                monthStart: 1,
+                dayStart: 19,
+                monthEnd: 2,
+                dayEnd: 20
+            }
+        ];
+
+        // Fechas de Mercurio retrógrado en 2025
+        const mercuryRetrogradeDates = [
+            { start: new Date('2025-03-15'), end: new Date('2025-04-07') },
+            { start: new Date('2025-07-18'), end: new Date('2025-08-11') },
+            { start: new Date('2025-11-09'), end: new Date('2025-11-29') }
+        ];
+
+        // Fechas de lunas llenas en 2025
+        const fullMoonDates = [
+            new Date('2025-01-13'),
+            new Date('2025-02-12'),
+            new Date('2025-03-14'),
+            new Date('2025-04-13'),
+            new Date('2025-05-12'),
+            new Date('2025-06-11'),
+            new Date('2025-07-10'),
+            new Date('2025-08-09'),
+            new Date('2025-09-07'),
+            new Date('2025-10-07'),
+            new Date('2025-11-05'),
+            new Date('2025-12-05')
+        ];
+
+        // Fases lunares
+        const moonPhases = [
+            { name: "Nueva", emoji: "🌑", days: 1 },
+            { name: "Creciente", emoji: "🌒", days: 7 },
+            { name: "Cuarto Creciente", emoji: "🌓", days: 7 },
+            { name: "Gibosa Creciente", emoji: "🌔", days: 5 },
+            { name: "Llena", emoji: "🌕", days: 3 },
+            { name: "Gibosa Menguante", emoji: "🌖", days: 5 },
+            { name: "Cuarto Menguante", emoji: "🌗", days: 7 },
+            { name: "Menguante", emoji: "🌘", days: 7 }
+        ];
+
+        // Eventos astronómicos significativos de 2025 visibles desde España/Hemisferio Norte
+        const astronomicalEvents = [
+            {
+                month: 0, // Enero
+                date: "3-4 de enero",
+                description: "Lluvia de meteoros Cuadrántidas - Máxima actividad la noche del 3 al 4 de enero.",
+                visibility: "Mejor visibilidad en la segunda mitad de la noche. Luna en fase creciente, condiciones favorables."
+            },
+            {
+                month: 3, // Abril
+                date: "8 de abril",
+                description: "Eclipse solar total - No visible desde España (visible en Pacífico y Norteamérica).",
+                visibility: "Desde España solo se podrá seguir por transmisiones en directo."
+            },
+            {
+                month: 4, // Mayo
+                date: "5-6 de mayo",
+                description: "Lluvia de meteoros Eta Acuáridas - Restos del cometa Halley.",
+                visibility: "Mejor visibilidad antes del amanecer. Luna en fase creciente, buena visibilidad."
+            },
+            {
+                month: 7, // Agosto
+                date: "12-13 de agosto",
+                description: "Lluvia de meteoros Perseidas - Máxima actividad noche del 12 al 13 de agosto.",
+                visibility: "Excelentes condiciones este año con Luna nueva. Hasta 100 meteoros/hora en lugares oscuros."
+            },
+            {
+                month: 9, // Octubre
+                date: "28-29 de octubre",
+                description: "Eclipse lunar parcial - Visible completamente desde España.",
+                visibility: "Comienza a las 20:01 (hora peninsular), máximo a las 22:14. Visible a simple vista."
+            },
+            {
+                month: 11, // Diciembre
+                date: "13-14 de diciembre",
+                description: "Lluvia de meteoros Gemínidas - Una de las mejores lluvias del año.",
+                visibility: "Luna en cuarto creciente, condiciones muy favorables después de la medianoche."
+            }
+        ];
+
+        // Obtener el signo zodiacal actual
+        function getCurrentZodiacSign(date) {
+            const day = date.getDate();
+            const month = date.getMonth();
+            
+            for (const sign of zodiacSigns) {
+                // Caso especial para Capricornio (diciembre-enero)
+                if (sign.monthStart === 11 && sign.monthEnd === 0) {
+                    if ((month === 11 && day >= sign.dayStart) || 
+                        (month === 0 && day <= sign.dayEnd)) {
+                        return sign;
+                    }
+                } 
+                // Para los demás signos
+                else if ((month === sign.monthStart && day >= sign.dayStart) || 
+                         (month === sign.monthEnd && day <= sign.dayEnd)) {
+                    return sign;
+                }
+            }
+            
+            return zodiacSigns[0]; // Por defecto
+        }
+
+        // Obtener el siguiente signo zodiacal
+        function getNextZodiacSign(currentSign) {
+            const currentIndex = zodiacSigns.findIndex(sign => sign.name === currentSign.name);
+            return zodiacSigns[(currentIndex + 1) % zodiacSigns.length];
+        }
+
+        // Obtener semana del mes (1-5)
+        function getWeekOfMonth(date) {
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            const offset = (firstDay > 0) ? firstDay - 1 : 6;
+            return Math.ceil((date.getDate() + offset) / 7);
+        }
+
+        // Calcular fase lunar aproximada
+        function getMoonPhase(date) {
+            const lunarCycle = 29.53;
+            const knownNewMoon = new Date('2025-01-01');
+            const daysSinceKnown = (date - knownNewMoon) / (1000 * 60 * 60 * 24);
+            const currentPosition = daysSinceKnown % lunarCycle;
+            
+            let accumulatedDays = 0;
+            for (const phase of moonPhases) {
+                accumulatedDays += phase.days;
+                if (currentPosition < accumulatedDays) {
+                    return phase;
+                }
+            }
+            return moonPhases[0];
+        }
+
+        // Calcular días hasta la próxima luna llena
+        function getNextFullMoonCountdown(currentDate) {
+            const nextFullMoon = fullMoonDates.find(date => date > currentDate);
+            
+            if (!nextFullMoon) {
+                return { days: 0, date: "No hay datos disponibles" };
+            }
+            
+            const diffTime = nextFullMoon - currentDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return {
+                days: diffDays,
+                date: nextFullMoon.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+            };
+        }
+
+        // Obtener mes actual (0-11)
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentSign = getCurrentZodiacSign(currentDate);
+        const nextSign = getNextZodiacSign(currentSign);
+        const weekOfMonth = getWeekOfMonth(currentDate);
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+                           "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+        // Determinar si Mercurio está retrógrado
+        function isMercuryRetrograde() {
+            return mercuryRetrogradeDates.some(period => 
+                currentDate >= period.start && currentDate <= period.end
+            );
+        }
+
+        // Mostrar información astral dinámica
+        function updateAstralInfo() {
+            const mercurioInfo = document.getElementById('mercurio-info');
+            const moonPhaseInfo = document.getElementById('moon-phase');
+            const fullMoonCountdown = document.getElementById('full-moon-countdown');
+            const signsContainer = document.getElementById('current-signs');
+            const revealBtn = document.getElementById('revealBtn');
+            const eventDate = document.getElementById('event-date');
+            const eventDescription = document.getElementById('event-description');
+            const eventVisibility = document.getElementById('event-visibility');
+            
+            // Actualizar estado de Mercurio para 2025 (con saltos de línea)
+            if (isMercuryRetrograde()) {
+                const currentPeriod = mercuryRetrogradeDates.find(period => 
+                    currentDate >= period.start && currentDate <= period.end
+                );
+                const startDate = currentPeriod.start.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+                const endDate = currentPeriod.end.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+                mercurioInfo.innerHTML = `☿ <strong>Mercurio Retrógrado</strong><br>
+                Del ${startDate} al ${endDate}<br>
+                ⚠️ Revisa comunicaciones<br>
+                ⚠️ Evita decisiones importantes`;
+            } else {
+                const nextRetrograde = mercuryRetrogradeDates.find(period => currentDate < period.start);
+                if (nextRetrograde) {
+                    const nextDate = nextRetrograde.start.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });
+                    mercurioInfo.innerHTML = `☿ <strong>Mercurio Directo</strong><br>
+                    ✔️ Buen momento para comunicaciones<br>
+                    Próximo retrógrado: ${nextDate}`;
+                } else {
+                    mercurioInfo.innerHTML = `☿ <strong>Mercurio Directo</strong><br>
+                    ✔️ Buen momento para comunicaciones<br>
+                    No hay más retrógrados este año`;
+                }
+            }
+            
+            // Actualizar fase lunar y contador de luna llena
+            const moonPhase = getMoonPhase(currentDate);
+            moonPhaseInfo.innerHTML = `${moonPhase.emoji} <strong>Luna ${moonPhase.name}</strong> (${currentDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })})`;
+            
+            const nextFullMoon = getNextFullMoonCountdown(currentDate);
+            if (nextFullMoon.days > 0) {
+                fullMoonCountdown.innerHTML = `Próxima luna llena en <strong>${nextFullMoon.days} días</strong> (${nextFullMoon.date})`;
+            } else {
+                fullMoonCountdown.innerHTML = `¡Hoy es luna llena! 🌕`;
+            }
+            
+            // Actualizar botón con la temporada astral
+            revealBtn.innerHTML = `Temporada de ${currentSign.name} ${currentSign.emoji}, Semana ${weekOfMonth} de ${monthNames[currentMonth]}`;
+            
+            // Mostrar solo 2 signos: el actual y el siguiente
+            const currentSigns = [currentSign, nextSign];
+            
+            // Generar tarjetas de signos con información completa
+            signsContainer.innerHTML = currentSigns.map(sign => `
+                <div class="sign-card">
+                    <span class="emoji">${sign.emoji}</span>
+                    <h3>${sign.name}</h3>
+                    <p>${sign.date}</p>
+                    <p><strong>Elemento:</strong> ${sign.element}</p>
+                    <p><strong>Planeta:</strong> ${sign.planet}</p>
+                    <p><strong>Piedra:</strong> ${sign.stone}</p>
+                </div>
+            `).join('');
+            
+            // Actualizar evento astronómico del mes
+            const currentEvent = astronomicalEvents.find(event => event.month === currentDate.getMonth());
+            
+            if (currentEvent) {
+                eventDate.textContent = currentEvent.date;
+                eventDescription.textContent = currentEvent.description;
+                eventVisibility.textContent = currentEvent.visibility;
+            } else {
+                // Buscar próximo evento
+                const nextEvent = astronomicalEvents.find(event => event.month > currentDate.getMonth());
+                if (nextEvent) {
+                    const nextMonth = monthNames[nextEvent.month];
+                    eventDate.textContent = `Próximamente en ${nextMonth}`;
+                    eventDescription.textContent = `${nextEvent.date}: ${nextEvent.description}`;
+                    eventVisibility.textContent = nextEvent.visibility;
+                } else {
+                    eventDate.textContent = "Próximamente";
+                    eventDescription.textContent = "No hay eventos astronómicos significativos visibles desde España en los próximos meses.";
+                    eventVisibility.textContent = "";
+                }
+            }
+        }
+
+        // Cargar el embed de Instagram de forma fiable
+        function loadInstagramEmbed() {
+            const embed = document.getElementById('instagramEmbed');
+            const spinner = document.getElementById('loadingSpinner');
+            const revealBtn = document.getElementById('revealBtn');
+            
+            // Mostrar spinner y ocultar botón
+            spinner.style.display = 'block';
+            revealBtn.style.display = 'none';
+            
+            // Verificar si el script ya está cargado
+            if (!window.instgrm) {
+                const script = document.createElement('script');
+                script.src = 'https://www.instagram.com/embed.js';
+                script.async = true;
+                script.defer = true;
+                document.body.appendChild(script);
+                
+                script.onload = function() {
+                    if (window.instgrm) {
+                        instgrm.Embeds.process();
+                        setTimeout(() => {
+                            spinner.style.display = 'none';
+                            embed.style.display = 'flex';
+                        }, 1000);
+                    } else {
+                        fallbackLoad();
+                    }
+                };
+                
+                script.onerror = fallbackLoad;
+            } else {
+                // Si ya está cargado, procesar directamente
+                instgrm.Embeds.process();
+                spinner.style.display = 'none';
+                embed.style.display = 'flex';
+            }
+        }
+
+        // Fallback si falla la carga del script
+        function fallbackLoad() {
+            const embed = document.getElementById('instagramEmbed');
+            const spinner = document.getElementById('loadingSpinner');
+            const revealBtn = document.getElementById('revealBtn');
+            
+            spinner.style.display = 'none';
+            embed.innerHTML = `
+                <div style="padding: 20px; text-align: center;">
+                    <p>No se pudo cargar el contenido de Instagram.</p>
+                    <a href="https://www.instagram.com/fersita.fresita._" target="_blank" style="color: #D4AF37; font-weight: 600;">
+                        Ver horóscopo en Instagram
+                    </a>
+                </div>
+            `;
+            embed.style.display = 'flex';
+            revealBtn.style.display = 'none';
+        }
+
+        // Llamar a la función al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAstralInfo();
+            
+            // Sistema de revelación del horóscopo
+            document.getElementById('revealBtn').addEventListener('click', loadInstagramEmbed);
+        });
+    </script>
+</body>
+</html> 

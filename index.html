@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Refrán del día</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&family=Comfortaa:wght@500&display=swap');
+        
+        :root {
+            --color-primary: #5F7161;
+            --color-secondary: #6D8B74;
+            --color-accent: #D0B8A8;
+            --color-refran: #5A6D6E;
+            --color-soft: #8E9B97;
+        }
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(-45deg, #EFEAD8, #D0C9C0, #a7c4bc, #6D8B74);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-primary);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        h1 {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            font-size: 2rem;
+        }
+        
+        .fecha {
+            color: var(--color-secondary);
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .origen-refran {
+            font-size: 0.9rem;
+            color: var(--color-soft);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .origen-refran em {
+            font-style: italic;
+        }
+        
+        .origen-refran strong {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        
+        .refran {
+            font-family: 'Comfortaa', cursive;
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin: 30px 0;
+            font-weight: 500;
+            color: var(--color-refran);
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .refran::before,
+        .refran::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+        }
+        
+        .refran::before {
+            top: 0;
+        }
+        
+        .refran::after {
+            bottom: 0;
+        }
+        
+        .botones {
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: var(--color-secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        #likeBtn .heart {
+            transition: all 0.3s;
+        }
+        
+        #likeBtn.liked .heart {
+            color: #FF8FA3;
+            transform: scale(1.2);
+        }
+        
+        .nav-container {
+            margin-top: 30px;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: rgba(208, 184, 168, 0.15);
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            background: rgba(208, 184, 168, 0.25);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link::before {
+            content: '✦';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover::before {
+            opacity: 1;
+            left: -15px;
+            animation: twinkle 0.6s;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: var(--color-soft);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+        
+        /* Contenedor para compartir - versión original que funciona */
+        .share-container {
+            position: absolute;
+            left: -9999px;
+            width: 1080px;
+            height: 1920px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(
+                circle at center,
+                #FFFFFF 0%,
+                #FFD1DC 30%,
+                #EAA8FF 70%,
+                #C77DFF 100%
+            );
+        }
+        
+        .share-content {
+            width: 900px;
+            padding: 80px;
+            text-align: center;
+            background: transparent;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes twinkle {
+            0% { transform: translateY(-50%) scale(0.8); opacity: 0; }
+            50% { transform: translateY(-50%) scale(1.2); opacity: 1; }
+            100% { transform: translateY(-50%) scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .refran {
+                font-size: 1.5rem;
+                margin: 25px 0;
+                padding: 15px 0;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 0.85rem;
+            }
+            
+            .nav-link {
+                font-size: 0.85rem;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .refran {
+                font-size: 1.3rem;
+            }
+            
+            .botones {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Refrán del día</h1>
+        <div class="fecha" id="fecha"></div>
+        <div class="origen-refran">
+            La palabra <strong>refrán</strong> procede del francés <em>refrain</em> y significa dicho agudo y sentencioso de uso común
+        </div>
+        
+        <div class="refran" id="refran"></div>
+        
+        <div class="botones">
+            <button id="likeBtn">
+                <span class="heart">🤍</span> Like
+            </button>
+            <button id="shareBtn">Compartir</button>
+        </div>
+
+        <div class="nav-container">
+            <a href="horoscopo.html" class="nav-link">Conoce qué tiene preparado el universo para ti →</a>
+        </div>
+        
+        <div class="footer">
+            Que tengas un día lleno de aprendizajes y buenos consejos
+        </div>
+    </div>
+
+    <!-- Contenedor para compartir - versión original -->
+    <div id="shareContainer" class="share-container">
+        <div class="share-content">
+            <h1 style="color: #8A2D8E; font-family: 'Quicksand'; margin-bottom: 30px; font-size: 4rem; text-shadow: 2px 2px 4px rgba(255,255,255,0.8);">Refrán del día</h1>
+            <div id="shareFecha" style="color: #BA68C8; font-family: 'Quicksand'; margin-bottom: 50px; font-size: 2rem; font-weight: 600; text-shadow: 1px 1px 2px rgba(255,255,255,0.6);"></div>
+            <div id="shareRefran" style="font-family: 'Comfortaa'; font-size: 5rem; color: #9C27B0; line-height: 1.4; padding: 60px 0; position: relative; margin: 40px 0; text-align: center; text-shadow: 2px 2px 4px rgba(255,255,255,0.5);">
+                <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 300px; height: 4px; background: linear-gradient(90deg, transparent, #EAA8FF, transparent); top: 0;"></div>
+                <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 300px; height: 4px; background: linear-gradient(90deg, transparent, #EAA8FF, transparent); bottom: 0;"></div>
+            </div>
+            <div style="color: #BA68C8; font-family: 'Quicksand'; margin-top: 60px; font-size: 2rem; font-style: italic; text-align: center; font-weight: 500; text-shadow: 1px 1px 2px rgba(255,255,255,0.6);">
+                Los refranes son la sabiduría de los pueblos en cápsulas verbales. Feliz día &lt;3
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Array completo de refranes generales (250+ refranes únicos)
+        const refranesGenerales = [
+            "A caballo regalado no le mires el diente",
+            "A falta de pan, buenas son tortas",
+            "A buen entendedor, pocas palabras bastan",
+            "A la tercera va la vencida",
+            "A palabras necias, oídos sordos",
+            "A río revuelto, ganancia de pescadores",
+            "Al que madruga, Dios le ayuda",
+            "Al mal tiempo, buena cara",
+            "Año de nieves, año de bienes",
+            "Barriga llena, corazón contento",
+            "Camarón que se duerme, se lo lleva la corriente",
+            "Cada loco con su tema",
+            "Cada maestrillo tiene su librillo",
+            "Cría cuervos y te sacarán los ojos",
+            "Cuando el río suena, agua lleva",
+            "De tal palo, tal astilla",
+            "Del árbol caído todos hacen leña",
+            "Dime con quién andas y te diré quién eres",
+            "Donde fuego se hace, humo sale",
+            "El hábito no hace al monje",
+            "El que mucho abarca, poco aprieta",
+            "En abril, aguas mil",
+            "En boca cerrada no entran moscas",
+            "En casa del herrero, cuchillo de palo",
+            "Gato con guantes no caza ratones",
+            "Genio y figura hasta la sepultura",
+            "Haz bien y no mires a quién",
+            "La cabra siempre tira al monte",
+            "La curiosidad mató al gato",
+            "La fe mueve montañas",
+            "La ocasión la pintan calva",
+            "Las paredes oyen",
+            "Lo comido es lo servido",
+            "Los años no pasan en balde",
+            "Más vale pájaro en mano que ciento volando",
+            "Más vale prevenir que curar",
+            "Más vale tarde que nunca",
+            "Matar dos pájaros de un tiro",
+            "No dejes para mañana lo que puedas hacer hoy",
+            "No hay mal que por bien no venga",
+            "No por mucho madrugar amanece más temprano",
+            "No se ganó Zamora en una hora",
+            "No todo el monte es orégano",
+            "Ojos que no ven, corazón que no siente",
+            "Para el amor y la tos, no hay secreto",
+            "Perro ladrador, poco mordedor",
+            "Poderoso caballero es Don Dinero",
+            "Quien a buen árbol se arrima, buena sombra le cobija",
+            "Quien mucho abarca, poco aprieta",
+            "Quien no llora, no mama",
+            "Quien siembra vientos, recoge tempestades",
+            "Quien tiene boca se equivoca",
+            "Sarna con gusto no pica",
+            "Si el río suena, agua lleva",
+            "Si la montaña no va a Mahoma, Mahoma va a la montaña",
+            "Sobre gustos no hay nada escrito",
+            "Tanto va el cántaro a la fuente que al final se rompe",
+            "Todos los caminos llevan a Roma",
+            "Un clavo saca otro clavo",
+            "Zapatero a tus zapatos",
+            "A Dios rogando y con el mazo dando",
+            "Agua que no has de beber, déjala correr",
+            "Ande yo caliente, ríase la gente",
+            "A otro perro con ese hueso",
+            "A quien Dios quiere bien, la lebre le cría",
+            "Buenas son mangas después de Pascua",
+            "Cada gallo canta en su muladar",
+            "Cada oveja con su pareja",
+            "Como agua para chocolate",
+            "Con paciencia y saliva, el elefante se la metió a la hormiga",
+            "Cuando las barbas de tu vecino veas pelar, pon las tuyas a remojar",
+            "De noche todos los gatos son pardos",
+            "Dios aprieta pero no ahoga",
+            "Dios los cría y ellos se juntan",
+            "El amor es ciego",
+            "El que calla otorga",
+            "El que no corre, vuela",
+            "El que se fue a Sevilla, perdió su silla",
+            "El tiempo todo lo cura",
+            "En el país de los ciegos, el tuerto es rey",
+            "Entre col y col, lechuga",
+            "Gallina vieja hace buen caldo",
+            "Hasta el rabo, todo es toro",
+            "La avaricia rompe el saco",
+            "La caridad bien entendida empieza por uno mismo",
+            "La excepción confirma la regla",
+            "La gota que colma el vaso",
+            "La lengua es el castigo del cuerpo",
+            "La mentira tiene patas cortas",
+            "La procesión va por dentro",
+            "La sangre sin fuego hierve",
+            "Las cuentas claras y el chocolate espeso",
+            "Lo barato sale caro",
+            "Los últimos serán los primeros",
+            "Mañana será otro día",
+            "Mientras hay vida, hay esperanza",
+            "Nadie es profeta en su tierra",
+            "Nadie sabe lo que tiene hasta que lo pierde",
+            "Ni tanto que queme al santo, ni tan poco que no lo alumbre",
+            "No dejes camino viejo por sendero nuevo",
+            "No es oro todo lo que reluce",
+            "No hay atajo sin trabajo",
+            "No hay mal que cien años dure",
+            "No hay peor ciego que el que no quiere ver",
+            "No hay peor sordo que el que no quiere oír",
+            "No se puede chiflar y comer pinole",
+            "No todo lo que brilla es oro",
+            "Obras son amores y no buenas razones",
+            "Pan para hoy y hambre para mañana",
+            "Para gusto los colores",
+            "Preguntando se llega a Roma",
+            "Quien bien te quiere te hará llorar",
+            "Quien canta sus males espanta",
+            "Quien tiene padrino se bautiza",
+            "Quien tiene un amigo tiene un tesoro",
+            "Quien todo lo quiere, todo lo pierde",
+            "Rome no se hizo en un día",
+            "Salvese quien pueda",
+            "Se cosecha lo que se siembra",
+            "Si quieres la paz, prepara la guerra",
+            "Tanto peca el que mata a la vaca como el que le agarra la pata",
+            "Tira la piedra y esconde la mano",
+            "Todos somos hijos de Dios",
+            "Uno no es lo que es, sino lo que hace",
+            "Vísteme despacio que tengo prisa",
+            "A lo hecho, pecho",
+            "A rey muerto, rey puesto",
+            "Al freír será el reír",
+            "Al que le pica, ajos come",
+            "Amigo en la adversidad, es amigo de verdad",
+            "Antes que te cases, mira lo que haces",
+            "Cada uno habla de la feria como le va en ella",
+            "Cree el ladrón que todos son de su condición",
+            "Cuando el diablo no sabe qué hacer, mata moscas con el rabo",
+            "De aquellos polvos vienen estos lodos",
+            "Después de la tempestad viene la calma",
+            "Dime de qué presumes y te diré de qué careces",
+            "Donde hay humo, hay calor",
+            "El que tiene boca se equivoca",
+            "El tiempo es oro",
+            "En casa del ahorcado no se habla de soga",
+            "Gente que viene y gente que va",
+            "Haz el bien sin mirar a quién",
+            "La cara es el espejo del alma",
+            "La diligencia es la madre de la buena ventura",
+            "La esperanza es lo último que se pierde",
+            "La fama es poca vida",
+            "La letra con sangre entra",
+            "La ocasión hace al ladrón",
+            "La paciencia es la madre de la ciencia",
+            "La primavera la sangre altera",
+            "La ropa sucia se lava en casa",
+            "La unión hace la fuerza",
+            "Las apariencias engañan",
+            "Las desgracias nunca vienen solas",
+            "Lo prometido es deuda",
+            "Los años no perdonan",
+            "Más vale malo conocido que bueno por conocer",
+            "Mientras en mi casa estoy, rey soy",
+            "Nadie da duros a cuatro pesetas",
+            "Nadie está contento con su suerte",
+            "No hay bien que de mal no venga",
+            "No hay cosa bien hecha que no sea bien pagada",
+            "No hay rosa sin espinas",
+            "No vendas la piel del oso antes de cazarlo",
+            "Por la boca muere el pez",
+            "Quien a hierro mata, a hierro muere",
+            "Quien bien ama, tarde olvida",
+            "Quien mucho duerme, poco aprende",
+            "Quien no arriesga, no gana",
+            "Quien no tiene cabeza, tiene pies",
+            "Quien pega primero, pega dos veces",
+            "Quien siembra vientos, recoge tempestades",
+            "A buen hambre no hay pan duro",
+            "A la cama no te irás sin saber una cosa más",
+            "Amor con amor se paga",
+            "Antes se coge al mentiroso que al cojo",
+            "Cada cual atiende su juego",
+            "Como te ves, me vi; como me ves, te verás",
+            "Cuando el gato no está, los ratones bailan",
+            "De médico, poeta y loco, todos tenemos un poco",
+            "Desnuda nací, desnuda me hallo",
+            "Donde manda capitán, no gobierna marinero",
+            "El que no llora, no mama",
+            "El que no oye consejo, no llega a viejo",
+            "En el reino de los ciegos, el tuerto es rey",
+            "Entre broma y broma, la verdad se asoma",
+            "Gallo que no canta, algo tiene en la garganta",
+            "La avaricia rompe el saco",
+            "La excepción confirma la regla",
+            "La gota que colma el vaso",
+            "La lengua es el castigo del cuerpo",
+            "La mentira tiene patas cortas",
+            "La procesión va por dentro",
+            "La sangre sin fuego hierve",
+            "Las cuentas claras y el chocolate espeso",
+            "Lo barato sale caro",
+            "Mañana será otro día",
+            "Nadie es profeta en su tierra",
+            "Nadie sabe lo que tiene hasta que lo pierde",
+            "Ni tanto que queme al santo, ni tan poco que no lo alumbre",
+            "No dejes camino viejo por sendero nuevo",
+            "No es oro todo lo que reluce",
+            "No hay atajo sin trabajo",
+            "No hay mal que cien años dure",
+            "No hay peor ciego que el que no quiere ver",
+            "No hay peor sordo que el que no quiere oír",
+            "No se puede chiflar y comer pinole",
+            "No todo lo que brilla es oro",
+            "Obras son amores y no buenas razones",
+            "Pan para hoy y hambre para mañana",
+            "Para gusto los colores",
+            "Preguntando se llega a Roma",
+            "Quien bien te quiere te hará llorar",
+            "Quien canta sus males espanta",
+            "Quien tiene un amigo tiene un tesoro",
+            "Quien todo lo quiere, todo lo pierde",
+            "Rome no se hizo en un día",
+            "Salvese quien pueda",
+            "Se cosecha lo que se siembra",
+            "Si quieres la paz, prepara la guerra",
+            "Tanto peca el que mata a la vaca como el que le agarra la pata",
+            "Tira la piedra y esconde la mano",
+            "Todos somos hijos de Dios",
+            "Uno no es lo que es, sino lo que hace"
+        ];
+
+        // Refranes especiales para fechas concretas (formato DD-MM)
+        const refranesEspeciales = {
+            "01-01": "Año nuevo, vida nueva", // Año Nuevo
+            "06-01": "Reyes magos, regalos pocos", // Reyes Magos
+            "14-02": "Amor con amor se paga", // San Valentín
+            "01-04": "En abril, refranes mil", // Día especial de abril
+            "23-04": "Quien no lee, poco sabe", // Día del Libro
+            "01-05": "Trabajo de hoy, pan para mañana", // Día del Trabajo
+            "15-05": "Mayo florido, hermoso y cumplido", // Mayo
+            "21-06": "Verano largo, invierno corto", // Solsticio de verano
+            "23-09": "Otoño llega, hojas se alejan", // Equinoccio de otoño
+            "21-12": "Invierno frío, hogar calentito", // Solsticio de invierno
+            "24-12": "Nochebuena, noche de paz", // Nochebuena
+            "25-12": "Navidad juntos, alegría en todos", // Navidad
+            "31-12": "Año que acaba, suerte que llega" // Fin de año
+        };
+
+        function obtenerRefranDelDia() {
+            const hoy = new Date();
+            const diaMes = `${String(hoy.getDate()).padStart(2, '0')}-${String(hoy.getMonth() + 1).padStart(2, '0')}`;
+            
+            // Prioridad a refranes especiales
+            if (refranesEspeciales[diaMes]) {
+                return refranesEspeciales[diaMes];
+            }
+
+            // Para días normales: selección basada en día del año (1-365)
+            const start = new Date(hoy.getFullYear(), 0, 0);
+            const diff = hoy - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            return refranesGenerales[dayOfYear % refranesGenerales.length];
+        }
+
+        function mostrarRefran() {
+            const hoy = new Date();
+            const fechaTexto = hoy.toLocaleDateString('es-ES', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            const refran = obtenerRefranDelDia();
+            
+            // Actualizar DOM
+            document.getElementById("fecha").textContent = fechaTexto;
+            document.getElementById("shareFecha").textContent = fechaTexto;
+            document.getElementById("refran").textContent = refran;
+            document.getElementById("shareRefran").textContent = refran;
+            
+            // Guardar en localStorage (mismo refrán todo el día)
+            localStorage.setItem('ultimoRefran', JSON.stringify({
+                fecha: hoy.toDateString(),
+                refran: refran
+            }));
+        }
+
+        document.getElementById("likeBtn").addEventListener("click", function() {
+            const btn = this;
+            btn.classList.toggle("liked");
+            btn.querySelector('.heart').textContent = btn.classList.contains("liked") ? "❤️" : "🤍";
+        });
+
+        document.getElementById("shareBtn").addEventListener("click", async function() {
+            // Generar la imagen
+            const shareContainer = document.getElementById('shareContainer');
+            
+            try {
+                const canvas = await html2canvas(shareContainer, {
+                    scale: 2,
+                    backgroundColor: null,
+                    width: 1080,
+                    height: 1920,
+                    logging: true,
+                    useCORS: true
+                });
+                
+                // Convertir a blob y compartir
+                canvas.toBlob(async (blob) => {
+                    const file = new File([blob], 'refran-del-dia.png', { type: 'image/png' });
+                    
+                    if (navigator.share) {
+                        try {
+                            await navigator.share({
+                                title: 'Refrán del día',
+                                text: 'Mira este refrán que encontré hoy:',
+                                files: [file]
+                            });
+                        } catch (err) {
+                            console.log('Error al compartir:', err);
+                            descargaImagen(canvas);
+                        }
+                    } else {
+                        descargaImagen(canvas);
+                    }
+                }, 'image/png');
+            } catch (err) {
+                console.error('Error al generar imagen:', err);
+                compartirTexto();
+            }
+        });
+
+        function descargaImagen(canvas) {
+            const link = document.createElement('a');
+            link.download = 'refran-del-dia.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function compartirTexto() {
+            const texto = `Refrán del día (${document.getElementById("fecha").textContent}):\n\n${document.getElementById("refran").textContent}\n\nDescubre más en: ${window.location.href}`;
+            prompt("Copia este mensaje para compartir:", texto);
+        }
+
+        // Al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+            const hoy = new Date();
+            const ultimoRefran = JSON.parse(localStorage.getItem('ultimoRefran'));
+            
+            if (ultimoRefran && ultimoRefran.fecha === hoy.toDateString()) {
+                // Usar el refrán guardado para este día
+                document.getElementById("refran").textContent = ultimoRefran.refran;
+                document.getElementById("shareRefran").textContent = ultimoRefran.refran;
+                document.getElementById("fecha").textContent = hoy.toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                document.getElementById("shareFecha").textContent = document.getElementById("fecha").textContent;
+            } else {
+                // Mostrar nuevo refrán del día
+                mostrarRefran();
+            }
+        });
+    </script>
+</body>
+</html>
