@@ -137,6 +137,14 @@
             display: block;
         }
         
+        .reveal-prompt {
+            text-align: center;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--light-accent);
+            font-size: 1.1rem;
+        }
+        
         .reveal-button {
             display: block;
             width: 100%;
@@ -148,7 +156,7 @@
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            margin: 30px 0;
+            margin: 0 auto 30px;
             transition: all 0.3s;
             font-family: 'Comfortaa', cursive;
             box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
@@ -286,6 +294,11 @@
             .back-link {
                 padding: 10px 20px;
             }
+            
+            .reveal-prompt {
+                font-size: 1rem;
+                margin: 15px 0;
+            }
         }
 
     </style>
@@ -325,6 +338,9 @@
             </div>
         </div>
         
+        <!-- NUEVA FRASE AÑADIDA -->
+        <p class="reveal-prompt">Descubre qué te depara el universo esta semana...</p>
+        
         <button id="revealBtn" class="reveal-button">
             <!-- El texto se actualizará dinámicamente -->
         </button>
@@ -332,8 +348,8 @@
         <div id="loadingSpinner" class="loading-spinner"></div>
         
         <div id="instagramEmbed" class="instagram-embed">
-            <!-- Reemplaza este enlace con tu publicación real de Instagram -->
-            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DH3Uh8UxP5H/?igsh=MXVzYmYyYzUxb2ppZw%3D%3D" data-instgrm-version="14" style="width: 100%;"></blockquote>
+            <!-- ENLACE ACTUALIZADO -->
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DIISDDBMpf5/?igsh=dzc4c2F3eXlvamw5" data-instgrm-version="14" style="width: 100%;"></blockquote>
         </div>
 
         <a href="index.html" class="back-link">Volver al Refrán</a>
@@ -807,4 +823,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
